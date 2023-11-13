@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Test success",
+    "function": "test_success",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test assert fail",
+    "function": "test_assert_fail",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test @pytest.mark.xfail",
+    "function": "test_xfail",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test @pytest.mark.skip",
+    "function": "test_skip_1",
+    "timeout": 10,
+    "points": 1
+  },{
+    "name": "Test pytest.skip",
+    "function": "test_skip_2",
+    "timeout": 10,
+    "points": 1
+  }
+]
