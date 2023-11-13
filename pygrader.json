@@ -1,19 +1,37 @@
 [
   {
-    "name": "Test success",
-    "function": "test_success",
+    "name": "Test success with return",
+    "function": "test_success_return",
     "timeout": 10,
     "points": 1
   },
   {
-    "name": "Test assert fail",
-    "function": "test_assert_fail",
+    "name": "Test success with I/O",
+    "function": "test_success_io",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test assert fail with return",
+    "function": "test_assert_fail_return",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test assert fail with I/O",
+    "function": " test_assert_fail_io",
     "timeout": 10,
     "points": 1
   },
   {
     "name": "Test @pytest.mark.xfail",
-    "function": "test_xfail",
+    "function": "test_xfail_1",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "Test pytest.xfail",
+    "function": "test_xfail_2",
     "timeout": 10,
     "points": 1
   },
@@ -22,7 +40,8 @@
     "function": "test_skip_1",
     "timeout": 10,
     "points": 1
-  },{
+  },
+  {
     "name": "Test pytest.skip",
     "function": "test_skip_2",
     "timeout": 10,

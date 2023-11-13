@@ -1,7 +1,6 @@
-import dataclasses
 import json
 import sys
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 from io import StringIO
 
 import pytest
@@ -40,7 +39,6 @@ def main():
         else:
             result.message = 'Unknown error, check GitHub Actions for details'
             print('Fail')
-        print(output)
         results_list.append(result)
 
     pass
