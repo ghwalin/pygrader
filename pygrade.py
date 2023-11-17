@@ -9,48 +9,60 @@ from _pytest.config import ExitCode
 
 def main():
     cases_list = load_cases()
-    results_list = list()
+    results = {
+        'category': 'pytest',
+        'points': 0,
+        'max': 0,
+        'messages': []
+    }
+    total_points = 0
+    total_max = 0
     args = ['-k', '']
     for case in cases_list:
-        result = Testresult(
-            name=case.name,
-            message='',
-            expected='',
-            actual='',
-            points=0
-        )
+        result = {
+            'name': case.name,
+            'message': '',
+            'expected': '',
+            'actual': '',
+            'points': 0,
+            'max': case.points
+        }
         args[1] = case.function
         with Capturing() as output:
             exitcode = pytest.main(args)
         if exitcode == ExitCode.OK:
             summary = output[len(output)-1]
             if 'passed' in summary:
-                result.message = 'Success'
-                result.points = case.points
-                print('Success')
+                result['message'] = 'Success'
+                result['points'] = case.points
             elif 'xfailed' in summary:
-                result.message = 'Success: Fails as expected'
-                result.points = case.points
+                result['message'] = 'Success: Fails as expected'
+                result['points'] = case.points
             elif 'skipped' in summary:
-                result.message = 'Test was skipped at this time'
+                result['message'] = 'Test was skipped at this time'
         elif exitcode == ExitCode.TESTS_FAILED:
             extract_assertion(output, result)
             print('assert fail')
         else:
             result.message = 'Unknown error, check GitHub Actions for details'
             print('Fail')
-        results_list.append(result)
 
-    pass
+        total_points += result['points']
+        total_max += result['max']
+        results['messages'].append(result)
+    results['points'] = total_points
+    results['max'] = total_max
+    json_out = json.dumps(results)
+    print(json_out)
 
 
-def extract_assertion(message, result):
+def extract_assertion(message, result) -> None:
     for index, line in enumerate(message):
         if 'AssertionError:' in line:
             parts = line.split('AssertionError:', 1)
-            result.message = 'Assertion Error: ' + parts[1]
-            result.expected = message[index + 1]
-            result.actual = message[index + 2]
+            result['message'] = 'Assertion Error: ' + parts[1]
+            result['expected'] = message[index + 1]
+            result['actual'] = message[index + 2]
             break
             pass
 
@@ -108,59 +120,6 @@ class Testcase:
     @timeout.setter
     def timeout(self, value):
         self._timeout = value
-
-    @property
-    def points(self):
-        return self._points
-
-    @points.setter
-    def points(self, value):
-        self._points = value
-
-
-@dataclass
-class Testresult:
-    """
-    the result of a test case
-    """
-    name: str
-    message: str
-    expected: str
-    actual: str
-    points: int
-
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
-    @property
-    def message(self):
-        return self._message
-
-    @message.setter
-    def message(self, value):
-        self._message = value
-
-    @property
-    def expected(self):
-        return self._expected
-
-    @expected.setter
-    def expected(self, value):
-        self._expected = value
-
-    @property
-    def actual(self):
-        return self._actual
-
-    @actual.setter
-    def actual(self, value):
-        self._actual = value
 
     @property
     def points(self):
